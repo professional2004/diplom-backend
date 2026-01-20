@@ -28,10 +28,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserControler {
   private final UserService userService;
-  private final PasswordEncoder passwordEncoder;
-  private final AuthenticationManager authenticationManager;
-  private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
+  private final AuthenticationManager authenticationManager;
+  private final PasswordEncoder passwordEncoder;
+  private final JwtService jwtService;
 
   @PostMapping("/register")
   public String addUser(@RequestBody User user) {
@@ -59,9 +59,6 @@ public class UserControler {
       .build();
 
     response.addHeader("Set-Cookie", cookie.toString());
-
-
-
     return "Успешный вход";
   }
   

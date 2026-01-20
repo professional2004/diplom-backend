@@ -31,7 +31,7 @@ public class SecurityConfig {
       .csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(auth -> auth
         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-        .requestMatchers("/", "/api/auth/login", "/api/auth/register", "/error").permitAll()
+        .requestMatchers("/", "/api/auth/login", "/api/auth/register", "/api/auth/forgot-password", "/api/auth/reset-password", "/error").permitAll()
         .anyRequest().authenticated()
       )
       // обработка ошибок доступа

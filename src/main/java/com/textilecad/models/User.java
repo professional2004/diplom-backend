@@ -1,5 +1,7 @@
 package com.textilecad.models;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,9 +28,15 @@ public class User {
   @Column(name = "email", unique = true, nullable = false)
   private String email;
 
-  @Column(name = "password",nullable = false)
+  @Column(name = "password", nullable = false)
   private String password;
 
-  @Column(name = "active",nullable = false)
+  @Column(name = "active", nullable = false)
   private boolean active;
+
+  @Column(name = "passwordResetTokenHash",length = 64)
+  private String passwordResetTokenHash;
+
+  @Column(name = "passwordResetTokenExpiresAt")
+  private LocalDateTime passwordResetTokenExpiresAt;
 }

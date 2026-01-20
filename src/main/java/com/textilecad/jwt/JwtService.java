@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +16,22 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-// В продакшене вынесите это в application.properties
-  private final String SECRET = "your_very_long_and_very_secret_key_for_jwt_auth_1234567890";
-  private final SecretKey KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
+  private final SecretKey KEY;
+  private final Long jwtTokenLifetime;
+
+  public JwtService(
+      @Value("${security.jwt.secret-key}") String jwtSecret,
+      @Value("${security.jwt.expiration-time}") Long jwtTokenLifetime
+  ) {
+    this.KEY = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    this.jwtTokenLifetime = jwtTokenLifetime;
+  }
 
   public String generateToken(UserDetails userDetails) {
     return Jwts.builder()
       .subject(userDetails.getUsername())
       .issuedAt(new Date(System.currentTimeMillis()))
-      .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 24 часа
+      .expiration(new Date(System.currentTimeMillis() + jwtTokenLifetime))
       .signWith(KEY)
       .compact();
   }

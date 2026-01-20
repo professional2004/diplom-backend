@@ -9,24 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class NavigationController {
   @GetMapping("/")
   public String getMainpage() {
-    return "forward:/main.html";
+    return "forward:/index.html";
   }
-
-  @GetMapping("/app")
-  public String getAppPage() {
-    return "forward:/home.html";
-  }
-
-
-  @GetMapping("/login")
-  public String getLoginPage() {
-    return "forward:/signin.html";
-  }
-
-
-  @GetMapping("/register")
-  public String getRegistrationPage() {
-    return "forward:/signup.html";
-  }
-  
 }

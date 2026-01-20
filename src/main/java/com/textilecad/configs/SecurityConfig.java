@@ -31,20 +31,10 @@ public class SecurityConfig {
       .csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(auth -> auth
         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-        .requestMatchers("/", "/login", "/register", "/auth/**", "/error").permitAll()
-        .requestMatchers("/css/**", "/js/**", "/materials/**").permitAll()
-        .requestMatchers("/app", "/app/**").authenticated()
+        .requestMatchers("/", "/api/auth/login", "/api/auth/register", "/error").permitAll()
         .anyRequest().authenticated()
       )
-      // обработка ошибок доступа (если бы были статические файлы)
-
-      // .exceptionHandling(exception -> exception
-      //     .authenticationEntryPoint((request, response, authException) -> {
-      //       response.sendRedirect("/login?error=access_denied");
-      //     })
-      //   )
-
-      // обработка ошибок доступа (для SPA-приложения)
+      // обработка ошибок доступа
       .exceptionHandling(exception -> exception
         .authenticationEntryPoint((request, response, authException) -> {
           response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

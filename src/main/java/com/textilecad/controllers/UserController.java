@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,7 +75,6 @@ public class UserController {
   }
 
 
-
   @GetMapping("/me")
   public ResponseEntity<MeResponseDTO> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
     if (userDetails == null) {
@@ -96,8 +96,32 @@ public class UserController {
       .maxAge(0)
       .build();
     httpResponse.addHeader("Set-Cookie", cookie.toString());
+
     MessageResponseDTO response = new MessageResponseDTO("Успешный выход из аккаунта");
     return ResponseEntity.status(HttpStatus.OK).body(response); 
   }
+
+
+  @DeleteMapping("/delete-account")
+  public ResponseEntity<MessageResponseDTO> deleteAccount(@AuthenticationPrincipal UserDetails userDetails, HttpServletResponse httpResponse) {
+    if (userDetails == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    userService.deleteByEmail(userDetails.getUsername());
+
+    ResponseCookie cookie = ResponseCookie.from("jwt_token", "")
+      .httpOnly(true)
+      .secure(true)
+      .sameSite("None")
+      .path("/")
+      .maxAge(0)
+      .build();
+    httpResponse.addHeader("Set-Cookie", cookie.toString());
+
+    MessageResponseDTO response = new MessageResponseDTO("Аккаунт успешно удален");
+    return ResponseEntity.status(HttpStatus.OK).body(response);
+  }
+
 
 }

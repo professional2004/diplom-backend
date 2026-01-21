@@ -1,6 +1,7 @@
 package com.textilecad.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.textilecad.models.User;
 import com.textilecad.repositories.UserRepository;
@@ -19,5 +20,10 @@ public class UserService {
   public User findByEmail(String email) {
     return userRepository.findByEmail(email)
       .orElseThrow(() -> new RuntimeException("Пользователь с email " + email + " не найден"));
+  }
+
+  @Transactional
+  public void deleteByEmail(String email) {
+    userRepository.deleteByEmail(email);
   }
 }
